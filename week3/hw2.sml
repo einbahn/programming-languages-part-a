@@ -33,7 +33,7 @@ fun get_substitutions2 (xss, y) =
                 [] => acc
               | x :: xss' => case all_except_option(y, x) of
                                NONE => f(xss', acc)
-                             | SOME z => f(xss', z@acc)
+                             | SOME z => f(xss', acc@z)
     in
         f(xss,[])
     end
@@ -114,23 +114,6 @@ fun score (cards, goal) =
         else prelim_score
     end
 
-(* Write a function officiate, which “runs a game.” It takes a card list (the card-list) a move list
-(what the player “does” at each point), and an int (the goal) and returns the score at the end of the
-game after processing (some or all of) the moves in the move list in order. Use a locally defined recursive
-helper function that takes several arguments that together represent the current state of the game. As
-described above:
-• The game starts with the held-cards being the empty list.
-• The game ends if there are no more moves. (The player chose to stop since the move list is empty.)
-• If the player discards some card c, play continues (i.e., make a recursive call) with the held-cards
-not having c and the card-list unchanged. If c is not in the held-cards, raise the IllegalMove
-exception.
-• If the player draws and the card-list is (already) empty, the game is over. Else if drawing causes
-the sum of the held-cards to exceed the goal, the game is over (after drawing). Else play continues
-with a larger held-cards and a smaller card-list.
-Sample solution for (g) is under 20 lines.
- *)
-
-
 fun officiate(card_list, move_list, goal) =
     let fun game(card_list, move_list, held_cards) =
         if sum_cards(held_cards) > goal
@@ -150,11 +133,3 @@ fun officiate(card_list, move_list, goal) =
     in
         game(card_list, move_list, [])
     end
-                 
-(* 
-val test11 = officiate ([(Hearts, Num 2),(Clubs, Num 4)],[Draw], 15) = 6
-val test12 = officiate ([(Clubs,Ace),(Spades,Ace),(Clubs,Ace),(Spades,Ace)],[Draw,Draw,Draw,Draw,Draw],42) = 3
-
-val test13 = ((officiate([(Clubs,Jack),(Spades,Num(8))],[Draw,Discard(Hearts,Jack)],42);false) 
-              handle IllegalMove => true) *)
-    
