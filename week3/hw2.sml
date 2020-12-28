@@ -123,13 +123,11 @@ fun officiate(card_list, move_list, goal) =
               ([], _) => score(held_cards, goal)
             | (_, []) => score(held_cards, goal)
             | (card::card_list', move::move_list') => 
-                case move of
+                  case move of
                     Draw => game(card_list', move_list', card::held_cards)
-                    | Discard(i) => let 
-                                        val remain = remove_card(held_cards, i, IllegalMove)
-                                    in
-                                        game(card::card_list', move_list', remain)
-                                    end
+                  | Discard(i) => game(card::card_list', 
+                                       move_list', 
+                                       remove_card(held_cards, i, IllegalMove))
     in
         game(card_list, move_list, [])
     end
